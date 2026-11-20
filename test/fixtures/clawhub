@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+"""Local registry for exercising publish and retry without contacting ClawHub."""
+import hashlib
+import json
+import os
+import sys
+from pathlib import Path
+
+args = sys.argv[sys.argv.index("package") + 1:]
+command, target = args[:2]
+store = Path(os.environ["PETERFLOW_TEST_REGISTRY"])
+data = json.loads(store.read_text())
+
+
+def option(flag):
+    return args[args.index(flag) + 1]
+
+
+if command == "inspect":
+    result = {"version": data[target]}
+elif command == "publication":
+    result = {"state": data.get("state", "absent")}
+elif command == "validate":
+    result = {"status": "pass", "summary": {"issueCount": 0}}
+elif command == "publish":
+    bundle = Path(target)
+    name = option("--name")
+    version = option("--version")
+    files = [{"path": p.relative_to(bundle).as_posix(), "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
+             for p in bundle.rglob("*") if p.is_file()]
+    result = {"name": name, "version": version, "files": len(files)}
+    if "--dry-run" not in args:
+        assert "--wait" in args
+        data[name] = {"version": version, "files": files,
+                      "verification": {"sourceCommit": option("--source-commit")}}
+        data["uploads"].append([name, version])
+        store.write_text(json.dumps(data))
+        result["publicationStatus"] = "published"
+else:
+    raise ValueError(command)
+print(json.dumps(result))
