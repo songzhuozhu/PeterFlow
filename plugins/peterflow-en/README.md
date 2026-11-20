@@ -1,9 +1,10 @@
 # PeterFlow · English skills
 
-Search skills.sh by the original name for any of the 21 English skills. Eleven are also available individually on ClawHub. The table lists the distribution channels for each skill.
+The English directory on skills.sh lists all 21 skills under their original names. Use a name to install one skill or `'*'` for the full set. The table links to each skill and includes the ClawHub entries for 11 of them. [English directory on skills.sh](https://www.skills.sh/songzhuozhu/peterflow-en)
 
 ```sh
 npx skills add songzhuozhu/PeterFlow-en --skill code-review
+npx skills add songzhuozhu/PeterFlow-en --skill '*'
 clawhub install @peterflow-en/plan
 ```
 

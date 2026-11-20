@@ -1,9 +1,10 @@
 # PeterFlow · 中文单项 Skill
 
-在 skills.sh 按原名搜索全部 21 项中文 Skill。另有 11 项提供 ClawHub 原生单项。表中列出了各项的发布入口。
+skills.sh 中文目录按原名列出全部 21 个 Skill。指定名称可以单装，使用 `'*'` 可以一次装齐。下表列出每个 Skill 的详情页，其中 11 项也有 ClawHub 原生单项入口。[skills.sh 中文目录](https://www.skills.sh/songzhuozhu/peterflow-zh)
 
 ```sh
 npx skills add songzhuozhu/PeterFlow-zh --skill code-review
+npx skills add songzhuozhu/PeterFlow-zh --skill '*'
 clawhub install @peterflow-zh/plan
 ```
 
