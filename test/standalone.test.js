@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, copyFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { basename, join } from 'node:path';
+import { basename, delimiter, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { nativeClawHubSkills } from '../scripts/standalone-skills.mjs';
@@ -30,6 +30,20 @@ test('each catalog lists 21 MIT skills and only the 11 approved native ClawHub e
   }
 });
 
+test('anonymous verification accepts the registry-generated Skill Card and detects other extra files', t => {
+  const bin = mkdtempSync(join(tmpdir(), 'peterflow-public-check-'));
+  t.after(() => rmSync(bin, { recursive: true, force: true }));
+  copyFileSync(join(root, 'test/fixtures/clawhub-inspect'), join(bin, 'clawhub'));
+  chmodSync(join(bin, 'clawhub'), 0o755);
+  const args = [join(root, 'scripts/sync-clawhub-skills.mjs'), 'en', 'a'.repeat(40), '--check'];
+  const env = { ...process.env, PATH: bin + delimiter + process.env.PATH, CLAWHUB_SKILL_TOKEN: 'fixture' };
+  const result = execFileSync(process.execPath, args, { cwd: root, env, encoding: 'utf8' });
+  assert.equal(result.match(/Verified public/g).length, 11);
+  const extra = spawnSync(process.execPath, args, { cwd: root, encoding: 'utf8', env: { ...env, PETERFLOW_TEST_EXTRA_FILE: 'plan' } });
+  assert.notEqual(extra.status, 0);
+  assert.match(extra.stderr, /unexpected\.md/);
+});
+
 test('the edition mirrors advance independently and refuse a divergent history', t => {
   const dir = mkdtempSync(join(tmpdir(), 'peterflow-source-test-'));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
@@ -39,8 +53,8 @@ test('the edition mirrors advance independently and refuse a divergent history',
   const options = { cwd: dir, env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] };
   const git = (...args) => execFileSync('git', args, options).trim();
   const script = join(root, 'scripts/sync-skill-source.sh');
-  function sync(lang) {
-    const output = execFileSync('bash', [script, lang, 'HEAD', join(dir, lang + '.git')], options);
+  function sync(lang, ...flags) {
+    const output = execFileSync('bash', [script, lang, 'HEAD', join(dir, lang + '.git'), ...flags], options);
     return Object.fromEntries(output.trim().split('\n').map(line => line.split('=')));
   }
   git('init', '-q', '-b', 'main');
@@ -61,6 +75,8 @@ test('the edition mirrors advance independently and refuse a divergent history',
 
   writeFileSync(join(dir, 'plugins/peterflow-zh/skills/dev/plan/SKILL.md'), 'updated');
   git('commit', '-qam', 'change Chinese plan');
+  assert.throws(() => sync('zh', '--check'));
+  assert.equal(sync('en', '--check').revision, en.revision);
   assert.deepEqual(sync('en'), { previous: en.revision, revision: en.revision });
   const updated = sync('zh');
   assert.equal(updated.previous, zh.revision);

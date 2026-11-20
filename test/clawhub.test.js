@@ -37,7 +37,9 @@ test('a retry finishes both complete language bundles, then only releases change
 
   ok(run('zh', 'b'));
   assert.deepEqual(read().uploads, []);
+  assert.notEqual(run('zh', 'b', ['--check']).status, 0);
   ok(run('zh', 'b', ['--publish']));
+  ok(run('zh', 'b', ['--check']));
   write({ ...read(), state: 'failed' });
   const failed = run('en', 'b', ['--publish']);
   assert.notEqual(failed.status, 0);

@@ -7,11 +7,11 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { isDeepStrictEqual, parseArgs } from 'node:util';
 
 const repo = 'songzhuozhu/PeterFlow';
-const { positionals: [lang, commit, ...extra], values: { publish, out } } = parseArgs({
-  allowPositionals: true, options: { publish: { type: 'boolean', default: false }, out: { type: 'string' } },
+const { positionals: [lang, commit, ...extra], values: { publish, out, check } } = parseArgs({
+  allowPositionals: true, options: { publish: { type: 'boolean' }, check: { type: 'boolean' }, out: { type: 'string' } },
 });
-if (!['en', 'zh'].includes(lang) || !/^[a-f0-9]{40}$/.test(commit) || extra.length) {
-  throw new Error('Usage: node scripts/sync-clawhub.mjs <en|zh> <full Git commit> [--publish] [--out directory]');
+if (!['en', 'zh'].includes(lang) || !/^[a-f0-9]{40}$/.test(commit) || extra.length || (publish && check)) {
+  throw new Error('Usage: node scripts/sync-clawhub.mjs <en|zh> <full Git commit> [--publish | --check] [--out directory]');
 }
 const slug = `peterflow-${lang}`;
 const name = `@songzhuozhu/${slug}`;
@@ -100,6 +100,7 @@ async function sync() {
       console.log(`${name}@${version} already contains these files.`);
       return;
     }
+    if (check) throw new Error(`${name}@${version} differs from the tested files.`);
     const next = version.replace(/\d+$/, patch => String(Number(patch) + 1));
     if (publish) {
       const state = await publicationState(next);

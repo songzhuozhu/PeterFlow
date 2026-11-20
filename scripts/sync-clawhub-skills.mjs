@@ -7,11 +7,11 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { isDeepStrictEqual, parseArgs } from 'node:util';
 import { nativeClawHubSkills, fileHashes } from './standalone-skills.mjs';
 
-const { positionals: [lang, commit, ...extra], values: { publish } } = parseArgs({
-  allowPositionals: true, options: { publish: { type: 'boolean', default: false } },
+const { positionals: [lang, commit, ...extra], values: { publish, check } } = parseArgs({
+  allowPositionals: true, options: { publish: { type: 'boolean' }, check: { type: 'boolean' } },
 });
-if (!/^[a-f0-9]{40}$/.test(commit) || extra.length) {
-  throw new Error('Usage: node scripts/sync-clawhub-skills.mjs <zh|en> <Git commit> [--publish]');
+if (!/^[a-f0-9]{40}$/.test(commit) || extra.length || (publish && check)) {
+  throw new Error('Usage: node scripts/sync-clawhub-skills.mjs <zh|en> <Git commit> [--publish | --check]');
 }
 const skills = nativeClawHubSkills(lang);
 const owner = `peterflow-${lang}`;
@@ -30,10 +30,20 @@ function cli(args, env = cliEnv) {
 async function stage(name, version) {
   const url = new URL(`/api/v1/skills/${name}/versions/${version}/publication`, registry);
   url.searchParams.set('ownerHandle', owner);
-  const response = await fetch(url, {
-    headers: { Authorization: `Bearer ${statusToken}` },
-    redirect: 'error', signal: AbortSignal.timeout(30_000),
-  });
+  let response;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      response = await fetch(url, {
+        headers: { Authorization: `Bearer ${statusToken}` },
+        redirect: 'error', signal: AbortSignal.timeout(30_000),
+      });
+      break;
+    } catch (error) {
+      const transient = error.name === 'TimeoutError' || (error instanceof TypeError && error.message === 'fetch failed');
+      if (!transient || attempt === 3) throw error;
+      await delay(attempt * 1000);
+    }
+  }
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`@${owner}/${name}@${version}: publication lookup returned HTTP ${response.status}`);
   const { skill, publication } = await response.json();
@@ -47,15 +57,18 @@ function publicFiles(name, version) {
   const detail = cli(['inspect', ref, '--tag', 'latest', '--files'], publicEnv);
   assert.equal(detail.owner?.handle, owner, ref);
   assert.equal(detail.skill?.slug, name, ref);
-  assert.equal(detail.latestVersion?.version, version, ref);
-  assert.equal(detail.version?.version, version, ref);
+  assert.ok(detail.version?.version, ref);
+  assert.equal(detail.latestVersion?.version, detail.version.version, ref);
+  if (version) assert.equal(detail.version.version, version, ref);
   assert.ok(!detail.moderation?.isMalwareBlocked && !detail.moderation?.isSuspicious, `${ref}: default install is restricted`);
-  return Object.fromEntries(detail.version.files.map(f => [f.path, f.sha256]));
+  // ClawHub adds this reserved root file after scanning and excludes it from the upload fingerprint.
+  return Object.fromEntries(detail.version.files.filter(f => f.path !== 'skill-card.md').map(f => [f.path, f.sha256]));
 }
 
 function verifyPublic({ name, dir }, version) {
-  assert.deepEqual(publicFiles(name, version), fileHashes(dir), `@${owner}/${name}@${version}: public files differ`);
-  console.log(`Verified public @${owner}/${name}@${version}`);
+  const ref = `@${owner}/${name}${version ? '@' + version : ''}`;
+  assert.deepEqual(publicFiles(name, version), fileHashes(dir), `${ref}: public files differ`);
+  console.log(`Verified public ${ref}`);
 }
 
 const waiting = new Map();
@@ -104,7 +117,8 @@ try {
   if (publish && !statusToken) throw new Error('Publishing requires CLAWHUB_SKILL_TOKEN.');
   for (const skill of skills) {
     try {
-      await submit(skill);
+      if (check) verifyPublic(skill);
+      else await submit(skill);
     } catch (error) {
       failures.push(new Error(`@${owner}/${skill.name}: ${error.message}`));
     }

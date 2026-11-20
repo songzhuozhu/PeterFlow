@@ -1,5 +1,5 @@
 name: Check PeterFlow
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
 jobs:
@@ -17,3 +17,81 @@ jobs:
         with:
           python-version: '3.11'
       - run: npm test
+
+  clawhub:
+    name: ClawHub ${{ matrix.target }} (${{ matrix.lang }})
+    needs: check
+    if: github.repository == 'songzhuozhu/PeterFlow' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [zh, en]
+        target: [bundle, skills]
+    concurrency:
+      group: clawhub-peterflow-${{ matrix.lang }}-${{ matrix.target }}
+      queue: max
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check this commit is still on top of main
+        id: main
+        run: |
+          head=$(git ls-remote --exit-code origin refs/heads/main | cut -f1)
+          if [[ "$head" == "$GITHUB_SHA" ]]; then
+            echo 'current=true' >> "$GITHUB_OUTPUT"
+          else
+            echo "Skipping superseded commit $GITHUB_SHA (main is $head)."
+          fi
+        shell: bash
+      - uses: actions/setup-node@v4
+        if: steps.main.outputs.current == 'true'
+        with:
+          node-version: 24
+      - name: Install the ClawHub CLI
+        if: steps.main.outputs.current == 'true'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/clawhub-cli" --ignore-scripts --no-audit --no-fund clawhub@0.27.0
+          echo "$RUNNER_TEMP/clawhub-cli/node_modules/.bin" >> "$GITHUB_PATH"
+      - name: Sync the language bundle
+        if: steps.main.outputs.current == 'true' && matrix.target == 'bundle'
+        env:
+          CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
+          CLAWHUB_CONFIG_PATH: ${{ runner.temp }}/clawhub-auth.json
+          LANG_CODE: ${{ matrix.lang }}
+        run: |
+          if [[ -z "$CLAWHUB_TOKEN" ]]; then
+            echo 'ClawHub CI publishing is not configured. Checking the existing public bundle.'
+            node scripts/sync-clawhub.mjs "$LANG_CODE" "$GITHUB_SHA" --check
+            exit 0
+          fi
+          trap 'rm -f "$CLAWHUB_CONFIG_PATH"' EXIT
+          clawhub --registry https://clawhub.ai --no-input login --no-browser --token "$CLAWHUB_TOKEN"
+          unset CLAWHUB_TOKEN
+          node scripts/sync-clawhub.mjs "$LANG_CODE" "$GITHUB_SHA" --publish
+      - name: Publish individual skills under the edition publisher
+        if: steps.main.outputs.current == 'true' && matrix.target == 'skills'
+        env:
+          CLAWHUB_SKILL_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
+          CLAWHUB_CONFIG_PATH: ${{ runner.temp }}/clawhub-auth.json
+          CLAWHUB_REGISTRY: https://clawhub.ai
+          LANG_CODE: ${{ matrix.lang }}
+        run: |
+          if [[ -z "$CLAWHUB_SKILL_TOKEN" ]]; then
+            echo 'ClawHub CI publishing is not configured. Checking the existing public skills.'
+            node scripts/sync-clawhub-skills.mjs "$LANG_CODE" "$GITHUB_SHA" --check
+            exit 0
+          fi
+          trap 'rm -f "$CLAWHUB_CONFIG_PATH"' EXIT
+          clawhub --registry "$CLAWHUB_REGISTRY" --no-input login --no-browser --token "$CLAWHUB_SKILL_TOKEN"
+          node scripts/sync-clawhub-skills.mjs "$LANG_CODE" "$GITHUB_SHA" --publish
+
+  skills-sh:
+    needs: check
+    if: github.repository == 'songzhuozhu/PeterFlow' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    uses: ./.github/workflows/skills-sh.yml
+    secrets:
+      SKILLS_DEPLOY_KEY_ZH: ${{ secrets.SKILLS_DEPLOY_KEY_ZH }}
+      SKILLS_DEPLOY_KEY_EN: ${{ secrets.SKILLS_DEPLOY_KEY_EN }}

@@ -8,5 +8,12 @@ case "$edition" in zh|en) ;; *) echo "Unknown edition: $edition" >&2; exit 2 ;; 
 
 revision=$(git subtree split -q --prefix="plugins/peterflow-$edition" "$commit")
 previous=$(git ls-remote --refs "$remote" refs/heads/main | cut -f1)
-git push "$remote" "$revision:refs/heads/main" >&2
+if [[ ${4:-} == --check ]]; then
+  if [[ "$previous" != "$revision" ]]; then
+    echo "The public edition differs from the tested source; a mirror write credential is required." >&2
+    exit 1
+  fi
+else
+  git push "$remote" "$revision:refs/heads/main" >&2
+fi
 printf 'previous=%s\nrevision=%s\n' "$previous" "$revision"
