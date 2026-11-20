@@ -1,0 +1,5 @@
+interface:
+  display_name: "Learn"
+  short_description: "Study one lesson at a time or follow an agreed roadmap"
+policy:
+  allow_implicit_invocation: false

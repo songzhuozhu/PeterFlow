@@ -1,0 +1,18 @@
+{
+  "name": "peterflow-en",
+  "version": "0.1.1",
+  "description": "Bring a feature from a plan to tested code, with skills for review, recovery and handoff.",
+  "author": {
+    "name": "PeterFlow contributors"
+  },
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "PeterFlow · English",
+    "shortDescription": "Bring a feature from a plan to tested code, with skills for review, recovery and handoff.",
+    "category": "Developer Tools",
+    "logo": "./assets/icon.png",
+    "composerIcon": "./assets/icon.png",
+    "brandColor": "#20263b"
+  }
+}

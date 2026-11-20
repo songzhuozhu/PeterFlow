@@ -1,0 +1,3 @@
+interface:
+  display_name: "Debug 专家"
+  short_description: "定位疑难故障和性能回退，验证原场景是否恢复"

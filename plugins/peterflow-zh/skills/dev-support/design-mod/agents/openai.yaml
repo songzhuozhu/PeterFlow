@@ -1,0 +1,3 @@
+interface:
+  display_name: "模块与接口设计"
+  short_description: "用共同词汇判断模块深度、接口成本和接缝位置，比较可测试的设计"

@@ -1,0 +1,21 @@
+{
+  "name": "peterflow",
+  "owner": {
+    "name": "PeterFlow contributors"
+  },
+  "plugins": [
+    {
+      "name": "peterflow-en",
+      "source": "./plugins/peterflow-en",
+      "description": "PeterFlow · English"
+    },
+    {
+      "name": "peterflow-zh",
+      "source": "./plugins/peterflow-zh",
+      "description": "PeterFlow · 简体中文"
+    }
+  ],
+  "metadata": {
+    "description": "English and Simplified Chinese editions of the PeterFlow engineering workflow."
+  }
+}

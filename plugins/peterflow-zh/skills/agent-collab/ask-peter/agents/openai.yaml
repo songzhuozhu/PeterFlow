@@ -1,0 +1,5 @@
+interface:
+  display_name: "问 Peter"
+  short_description: "根据现有材料选择 PeterFlow 的下一步"
+policy:
+  allow_implicit_invocation: false

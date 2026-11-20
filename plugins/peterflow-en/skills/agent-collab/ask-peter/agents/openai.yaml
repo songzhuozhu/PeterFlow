@@ -1,0 +1,5 @@
+interface:
+  display_name: "Ask Peter"
+  short_description: "Choose a next step from the work you already have"
+policy:
+  allow_implicit_invocation: false

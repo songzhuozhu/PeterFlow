@@ -1,0 +1,18 @@
+{
+  "name": "peterflow-zh",
+  "version": "0.1.1",
+  "description": "从计划走到可验证的交付，按需使用评审、变更恢复与上下文交接。",
+  "author": {
+    "name": "PeterFlow contributors"
+  },
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "PeterFlow · 简体中文",
+    "shortDescription": "从计划走到可验证的交付，按需使用评审、变更恢复与上下文交接。",
+    "category": "Developer Tools",
+    "logo": "./assets/icon.png",
+    "composerIcon": "./assets/icon.png",
+    "brandColor": "#20263b"
+  }
+}

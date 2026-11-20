@@ -1,0 +1,5 @@
+interface:
+  display_name: "学习"
+  short_description: "逐节学习，或先定课程路线再一次生成全部短课"
+policy:
+  allow_implicit_invocation: false

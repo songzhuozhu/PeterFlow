@@ -1,0 +1,32 @@
+{
+  "name": "peterflow",
+  "interface": {
+    "displayName": "PeterFlow"
+  },
+  "plugins": [
+    {
+      "name": "peterflow-en",
+      "source": {
+        "source": "local",
+        "path": "./plugins/peterflow-en"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "peterflow-zh",
+      "source": {
+        "source": "local",
+        "path": "./plugins/peterflow-zh"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

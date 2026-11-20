@@ -1,0 +1,3 @@
+interface:
+  display_name: "Module design"
+  short_description: "Compare interfaces, dependencies and test seams"

@@ -1,0 +1,16 @@
+{
+  "name": "peterflow-en",
+  "version": "0.1.1",
+  "description": "Bring a feature from a plan to tested code, with skills for review, recovery and handoff.",
+  "author": {
+    "name": "PeterFlow contributors"
+  },
+  "license": "MIT",
+  "skills": [
+    "./skills/dev",
+    "./skills/dev-support",
+    "./skills/daily-work",
+    "./skills/agent-collab"
+  ],
+  "icon": "./assets/icon.png"
+}
