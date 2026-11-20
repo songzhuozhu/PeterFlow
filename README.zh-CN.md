@@ -191,9 +191,13 @@ claude plugin install peterflow-zh@peterflow
 
 #### [analyze](plugins/peterflow-zh/skills/dev/analyze/SKILL.md) · 拆完任务、开始实现前，按需检查遗漏
 
+用 `tasks` 或 `tasks-pro` 拆完任务后，如果需求分支多、任务间有依赖，可以先用 `analyze` 对照方案和任务清单查漏，再进入 `implement` 或 `implement-pro`。任务简单、验收清楚时可以直接实现。
+
 假设方案只写了“发送后清除草稿”。用户点了发送，发送失败，又关了页面，下次打开该看到什么？Agent 会顺着这个例子读需求、方案和已有任务，指出哪两处说法对不上、哪一步漏了，或者哪个决定还得你来做。轻量任务如果只有一份方案，也可以在实现前用它核对拿不准的场景。任务调整后，可以只复查受影响的部分。
 
 #### [converge](plugins/peterflow-zh/skills/dev/converge/SKILL.md) · 实现后，按需核对阶段或功能还差哪些验收
+
+用 `implement` 或 `implement-pro` 完成本阶段的实现后，如果改动跨多个入口或阶段，可以在收尾前用 `converge` 逐项核对哪些目标已经验过、哪些还要补做。小改动已从用户入口验清时，可以直接收尾。
 
 如果只试过“误关页面能找回草稿”，“发送成功后草稿不会再出现”就还没验过。Agent 会对照原目标、当前代码和实际测试结果，逐项标出已完成、未完成、未验证或受阻。要补的工作记回原任务，沿用原编号。
 

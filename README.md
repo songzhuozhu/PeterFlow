@@ -191,9 +191,13 @@ For example, to verify a document format upgrade, open an old document with comm
 
 #### [analyze](plugins/peterflow-en/skills/dev/analyze/SKILL.md) · Check for gaps after task breakdown, before implementation (optional)
 
+After `tasks` or `tasks-pro`, use `analyze` if the requirements have several branches or tasks depend on one another. Compare the plan with the task list before starting `implement` or `implement-pro`. For a small change with clear acceptance criteria, go straight to implementation.
+
 Suppose the plan says “clear the draft after sending.” You click Send, it fails, and you close the page. What should you see when you come back? The agent follows that case through the requirements, plan and any existing tasks. It points to conflicting instructions, missing steps or a decision you still need to make. For a small change with just a plan, use it before implementation if a scenario is unclear. If the tasks change, revisit the affected parts.
 
 #### [converge](plugins/peterflow-en/skills/dev/converge/SKILL.md) · Check remaining work after implementation, before closing a phase or feature (optional)
+
+After `implement` or `implement-pro`, use `converge` before closing a phase or feature if the change spans several entry points or phases. Check which goals have evidence and which still need work. For a small change already verified through the user entry point, you can finish directly.
 
 You’ve tested that a draft returns after you accidentally close the page. You still need a separate check that a sent draft stays gone. The agent compares each goal with the current code and actual test results, marks it complete, incomplete, unverified or blocked, and puts any follow-up on the task under its original ID.
 
