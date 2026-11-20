@@ -14,11 +14,11 @@ Thank you to the authors and contributors who shared how they work. I took the p
 
 ### Match the workflow to the task’s complexity
 
-Choose a workflow based on the scope of the change and how hard it will be to verify. For a small fix, a short workflow saves the time and tokens it takes to split up the work and write handoffs. As a feature grows, a missed case can cost more to fix later. That makes it worth building and checking the feature in phases.
+Choose a workflow based on the scope of the change and how hard it will be to verify. For a small fix, a short workflow saves the time and tokens it takes to split up the work and write handoffs. As a feature grows, a missed case can cost more to fix later. That makes it worth building and checking the feature in phases. When tasks have several dependencies, use `analyze` after the breakdown to check for gaps. When a change spans entry points or phases, use `converge` after implementation to compare test results with the acceptance criteria. Choose either check independently.
 
 - **Small tasks** (`plan` → `implement`). When the scope is narrow and the acceptance criteria are clear, agree on the approach in a few lines of chat. Make the change and verify it through the entry point people use.
-- **Medium tasks** (`plan` → `tasks` → `implement`). A small or medium feature within one module can have several behaviors to implement and verify. Settle the design, then break it into tasks. Record what each task delivers and how to check it, and work through the list.
-- **Large tasks** (`plan` → `tasks-pro` → `implement-pro`). `tasks-pro` breaks the plan into phases that can be verified independently and records which phases depend on others. The lead agent uses `implement-pro` to assign implementation, review and testing to separate subagents. Each subagent starts with a fresh context. The lead draws on the current plan and verified results from earlier phases to give it only the goal, relevant materials, permitted changes and acceptance criteria for its assignment.
+- **Medium tasks** (`plan` → `tasks` → `analyze` (optional) → `implement` → `converge` (optional)). A small or medium feature within one module can have several behaviors to implement and verify. Settle the design, then break it into tasks. Record what each task delivers and how to check it, and work through the list.
+- **Large tasks** (`plan` → `tasks-pro` → `analyze` (optional) → `implement-pro` → `converge` (optional)). `tasks-pro` breaks the plan into phases that can be verified independently and records which phases depend on others. The lead agent uses `implement-pro` to assign implementation, review and testing to separate subagents. Each subagent starts with a fresh context. The lead draws on the current plan and verified results from earlier phases to give it only the goal, relevant materials, permitted changes and acceptance criteria for its assignment.
 
 ### Keep standards current
 
@@ -189,11 +189,11 @@ The lead agent picks a phase that’s ready. One agent writes the code, another 
 
 For example, to verify a document format upgrade, open an old document with comments in the new editor and check that both the text and the comments still appear.
 
-#### [analyze](plugins/peterflow-en/skills/dev/analyze/SKILL.md) · Find gaps in a plan
+#### [analyze](plugins/peterflow-en/skills/dev/analyze/SKILL.md) · Check for gaps after task breakdown, before implementation (optional)
 
-Suppose the plan says “clear the draft after sending.” You click Send, it fails, and you close the page. What should you see when you come back? The agent follows that case through the requirements, plan and any existing tasks. It points to conflicting instructions, missing steps or a decision you still need to make. You can use it on a plan alone or revisit the check when the tasks change.
+Suppose the plan says “clear the draft after sending.” You click Send, it fails, and you close the page. What should you see when you come back? The agent follows that case through the requirements, plan and any existing tasks. It points to conflicting instructions, missing steps or a decision you still need to make. For a small change with just a plan, use it before implementation if a scenario is unclear. If the tasks change, revisit the affected parts.
 
-#### [converge](plugins/peterflow-en/skills/dev/converge/SKILL.md) · Check what’s left before shipping
+#### [converge](plugins/peterflow-en/skills/dev/converge/SKILL.md) · Check remaining work after implementation, before closing a phase or feature (optional)
 
 You’ve tested that a draft returns after you accidentally close the page. You still need a separate check that a sent draft stays gone. The agent compares each goal with the current code and actual test results, marks it complete, incomplete, unverified or blocked, and puts any follow-up on the task under its original ID.
 
