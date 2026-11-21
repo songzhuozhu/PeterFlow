@@ -5,22 +5,15 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { editionSkills, fileHashes } from './standalone-skills.mjs';
 
-const [lang, source, previous, revision] = process.argv.slice(2);
-if (!source || (previous && !revision)) {
-  throw new Error('Usage: node scripts/check-skills-sh.mjs <zh|en> <source URL or absolute directory> [previous revision]');
-}
-let skills = editionSkills(lang);
-if (previous) {
-  const changes = execFileSync('git', ['diff', '--no-renames', '--name-only', '-z', previous, revision, '--', 'skills'], { encoding: 'utf8' });
-  const names = new Set(changes.split('\0').filter(Boolean).map(path => path.split('/')[2]));
-  skills = skills.filter(skill => names.has(skill.name));
-}
+const [lang, source, ...extra] = process.argv.slice(2);
+if (!source || extra.length) throw new Error('Usage: node scripts/check-skills-sh.mjs <zh|en> <edition source>');
+const skills = editionSkills(lang);
 
 for (const { name, dir } of skills) {
   const project = mkdtempSync(join(tmpdir(), 'peterflow-single-'));
   try {
     execFileSync('skills', ['add', source, '--skill', name, '--agent', 'codex', '--copy', '--yes'], {
-      cwd: project, stdio: ['ignore', 'pipe', 'inherit'], env: { ...process.env, XDG_STATE_HOME: join(project, '.state') },
+      cwd: project, stdio: ['ignore', 'pipe', 'inherit'], env: { ...process.env, DISABLE_TELEMETRY: '1', XDG_STATE_HOME: join(project, '.state') },
     });
     const installed = join(project, '.agents/skills');
     assert.deepEqual(readdirSync(installed), [name], `${lang}/${name}: expected one installed skill`);

@@ -87,24 +87,23 @@ After a session, use `retro` to revisit corrections, commands and results and ch
 
 ## Install
 
-### Install the English edition in OpenClaw
+### Install the PeterFlow collection
 
-The English plugin contains all 21 skills, including `feature-retcon`. [Chinese plugin](https://clawhub.ai/songzhuozhu/plugins/peterflow-zh)
+Choose a language tag on the same ClawHub plugin. Each installs all 21 skills in that language, including `feature-retcon`. [PeterFlow plugin](https://clawhub.ai/songzhuozhu/plugins/peterflow)
 
 ```sh
-openclaw plugins install clawhub:@songzhuozhu/peterflow-en
+# English
+openclaw plugins install clawhub:@songzhuozhu/peterflow@en
+# 简体中文
+openclaw plugins install clawhub:@songzhuozhu/peterflow@zh
 ```
 
-### Find or install one skill
+### Install one skill with the skills CLI
 
-Search skills.sh by name for any of the 21 skills, such as `code-review`. Eleven, including `plan`, are also published as native ClawHub skills. Select the English source to install one skill. [Browse all 21 English entries](plugins/peterflow-en/README.md)
+Select a skill by its original name from the English source directory. Replace `code-review` with the skill you want. [21 English skills](plugins/peterflow-en/README.md)
 
 ```sh
-# skills.sh
-npx skills add songzhuozhu/PeterFlow-en --skill code-review
-
-# ClawHub
-clawhub install @peterflow-en/plan
+npx skills add https://github.com/songzhuozhu/PeterFlow/tree/main/plugins/peterflow-en/skills --skill code-review
 ```
 
 ### Ask your agent to install PeterFlow
@@ -293,8 +292,4 @@ If your team already has a document compatibility guide, add a line to `AGENTS.m
 
 To contribute a skill improvement, include a request that shows the behavior you want to change and what a good result looks like. Edit the corresponding files under `plugins/peterflow-en/skills/` and `plugins/peterflow-zh/skills/`, then run `npm test` to check the package, terminal installer and helpers. [MIT license](LICENSE) · [Upstream credits](THIRD_PARTY_NOTICES.md)
 
-After a push to `main` passes the tests, GitHub Actions distributes both editions from the tested commit. Maintainers configure these sources and repository secrets before enabling publication.
-
-- **Bundles** use `CLAWHUB_TOKEN` to update `@songzhuozhu/peterflow-en` and `@songzhuozhu/peterflow-zh`. Each changed bundle gets a new patch version.
-- **Individual skills on skills.sh** use the public repositories `songzhuozhu/PeterFlow-en` and `songzhuozhu/PeterFlow-zh`. Each target repository has its own write-enabled deploy key. The main repository stores the private keys as `SKILLS_DEPLOY_KEY_ZH` and `SKILLS_DEPLOY_KEY_EN`. The workflow fast-forwards each repository’s `main` to the history of its edition directory, then installs each changed skill individually. The platform manages its catalog and search index. [skills.sh listing FAQ](https://www.skills.sh/docs/faq)
-- **Native ClawHub skills** publish 11 entries each under `@peterflow-en` and `@peterflow-zh` using the separately issued, revocable `CLAWHUB_TOKEN`. The uploader checks the approved skills and their licenses. The 10 skills carrying third-party MIT notices are available individually via GitHub and skills.sh and are included in the MIT bundle. [ClawHub skill license](https://github.com/openclaw/clawhub/blob/main/docs/skill-format.md#license) · [Upstream credits](THIRD_PARTY_NOTICES.md)
+On a push to `main`, GitHub Actions runs the tests and publishes the changed language tags on the same ClawHub plugin using the repository’s `CLAWHUB_TOKEN`. English uses `en` and the default `latest` tag. Chinese uses `zh`. The workflow compares file hashes before releasing and verifies the SHA-256 of every published file. The skills CLI reads individual skills from their language directory in this repository.

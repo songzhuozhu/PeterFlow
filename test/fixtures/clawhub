@@ -17,7 +17,13 @@ def option(flag):
 
 
 if command == "inspect":
-    result = {"version": data[target]}
+    if target not in data:
+        sys.exit("Package not found or not visible to this account.")
+    pkg = data[target]
+    result = {"package": {"name": target, "family": "bundle-plugin", "tags": pkg["tags"]},
+              "owner": {"handle": "songzhuozhu"}, "version": None}
+    if "--tag" in args:
+        result["version"] = pkg["versions"][pkg["tags"][option("--tag")]]
 elif command == "publication":
     result = {"state": data.get("state", "absent")}
 elif command == "validate":
@@ -31,8 +37,15 @@ elif command == "publish":
     result = {"name": name, "version": version, "files": len(files)}
     if "--dry-run" not in args:
         assert "--wait" in args
-        data[name] = {"version": version, "files": files,
-                      "verification": {"sourceCommit": option("--source-commit")}}
+        manifest = json.loads((bundle / ".claude-plugin/plugin.json").read_text())
+        assert manifest["name"] == "peterflow"
+        assert json.loads((bundle / "package.json").read_text())["name"] == "@songzhuozhu/peterflow"
+        pkg = data.setdefault(name, {"tags": {}, "versions": {}})
+        assert version not in pkg["versions"]
+        pkg["versions"][version] = {"version": version, "files": files,
+                                    "verification": {"sourceCommit": option("--source-commit")}}
+        for tag in option("--tags").split(","):
+            pkg["tags"][tag] = version
         data["uploads"].append([name, version])
         store.write_text(json.dumps(data))
         result["publicationStatus"] = "published"

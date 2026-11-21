@@ -11,7 +11,7 @@ export function editionSkills(lang) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-// Native ClawHub skill uploads accept MIT-0. The remaining MIT skills ship in the edition repos and bundles.
+// Native ClawHub skill uploads accept MIT-0. Third-party notices must travel with the matching MIT skill.
 export function nativeClawHubSkills(lang) {
   const approved = new Set(['plan', 'tasks', 'tasks-pro', 'implement', 'implement-pro', 'analyze', 'converge',
     'context-handoff', 'quickstart', 'maintain-standards', 'feature-retcon']);

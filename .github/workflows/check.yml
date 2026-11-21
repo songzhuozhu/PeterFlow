@@ -19,18 +19,13 @@ jobs:
       - run: npm test
 
   clawhub:
-    name: ClawHub ${{ matrix.target }} (${{ matrix.lang }})
+    name: Publish PeterFlow on ClawHub
     needs: check
     if: github.repository == 'songzhuozhu/PeterFlow' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        lang: [zh, en]
-        target: [bundle, skills]
+    timeout-minutes: 60
     concurrency:
-      group: clawhub-peterflow-${{ matrix.lang }}-${{ matrix.target }}
+      group: peterflow-clawhub
       queue: max
     steps:
       - uses: actions/checkout@v4
@@ -70,25 +65,11 @@ jobs:
             exit 1
           fi
           echo "CLAWHUB_CONFIG_PATH=$CLAWHUB_CONFIG_PATH" >> "$GITHUB_ENV"
-      - name: Sync the language bundle
-        if: steps.main.outputs.current == 'true' && matrix.target == 'bundle'
-        env:
-          LANG_CODE: ${{ matrix.lang }}
-        run: node scripts/sync-clawhub.mjs "$LANG_CODE" "$GITHUB_SHA" --publish
-      - name: Publish individual skills under the edition publisher
-        if: steps.main.outputs.current == 'true' && matrix.target == 'skills'
-        env:
-          CLAWHUB_SKILL_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
-          LANG_CODE: ${{ matrix.lang }}
-        run: node scripts/sync-clawhub-skills.mjs "$LANG_CODE" "$GITHUB_SHA" --publish
+      - name: Publish both language tags of the same plugin
+        if: steps.main.outputs.current == 'true'
+        run: |
+          node scripts/sync-clawhub.mjs en "$GITHUB_SHA" --publish
+          node scripts/sync-clawhub.mjs zh "$GITHUB_SHA" --publish
       - name: Remove the runner's ClawHub session
         if: always() && steps.main.outputs.current == 'true'
         run: rm -f "$RUNNER_TEMP/clawhub-auth.json"
-
-  skills-sh:
-    needs: check
-    if: github.repository == 'songzhuozhu/PeterFlow' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    uses: ./.github/workflows/skills-sh.yml
-    secrets:
-      SKILLS_DEPLOY_KEY_ZH: ${{ secrets.SKILLS_DEPLOY_KEY_ZH }}
-      SKILLS_DEPLOY_KEY_EN: ${{ secrets.SKILLS_DEPLOY_KEY_EN }}

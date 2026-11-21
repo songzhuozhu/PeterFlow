@@ -87,24 +87,23 @@
 
 ## 安装
 
-### 在 OpenClaw 安装中文版
+### 安装 PeterFlow 合集
 
-中文版包含全部 21 个 Skill，包括 `feature-retcon`。[英文插件](https://clawhub.ai/songzhuozhu/plugins/peterflow-en)
+在 ClawHub 上选择同一插件的语言标签。每次安装包含对应语言的全部 21 个 Skill，其中包括 `feature-retcon`。[PeterFlow 插件](https://clawhub.ai/songzhuozhu/plugins/peterflow)
 
 ```sh
-openclaw plugins install clawhub:@songzhuozhu/peterflow-zh
+# 简体中文
+openclaw plugins install clawhub:@songzhuozhu/peterflow@zh
+# English
+openclaw plugins install clawhub:@songzhuozhu/peterflow@en
 ```
 
-### 搜索或只装一个 Skill
+### 用 skills CLI 安装单项
 
-在 skills.sh 按原名搜索全部 21 项，例如 `code-review`。另有 11 项提供 ClawHub 原生单项，例如 `plan`。选择中文来源即可单独安装。[21 个中文单项的详情入口](plugins/peterflow-zh/README.md)
+从原仓库的中文目录按名称选择 Skill。把 `code-review` 换成需要的名称即可。[21 项中文目录](plugins/peterflow-zh/README.md)
 
 ```sh
-# skills.sh
-npx skills add songzhuozhu/PeterFlow-zh --skill code-review
-
-# ClawHub
-clawhub install @peterflow-zh/plan
+npx skills add https://github.com/songzhuozhu/PeterFlow/tree/main/plugins/peterflow-zh/skills --skill code-review
 ```
 
 ### 让 Agent 安装
@@ -293,8 +292,4 @@ claude plugin install peterflow-zh@peterflow
 
 欢迎用一个实际案例改进 Skill，比如“一条会触发错误行为的请求，以及你希望看到的结果”。中英文实现分别在 `plugins/peterflow-zh/skills/` 和 `plugins/peterflow-en/skills/`。改动后运行 `npm test` 可检查安装包、终端向导和随包脚本。[MIT 许可](LICENSE) · [上游来源与致谢](THIRD_PARTY_NOTICES.md)
 
-推送到 `main` 并通过测试后，GitHub Actions 从同一提交分发中英文内容。首次启用时，维护者配置以下发布源和仓库 Secret。
-
-- **整包**使用 `CLAWHUB_TOKEN` 更新 `@songzhuozhu/peterflow-zh` 和 `@songzhuozhu/peterflow-en`。内容变化的包自动升一个补丁版本。
-- **skills.sh 单项**使用公开仓库 `songzhuozhu/PeterFlow-zh` 和 `songzhuozhu/PeterFlow-en`。两个目标仓库各用一把有写权限的部署密钥，私钥分别放在主仓库的 `SKILLS_DEPLOY_KEY_ZH`、`SKILLS_DEPLOY_KEY_EN`。工作流向各自的 `main` 快进推送，再逐项试装变更的 Skill。目录收录和搜索刷新由平台处理。[skills.sh 收录说明](https://www.skills.sh/docs/faq)
-- **ClawHub 原生单项**在 `@peterflow-zh` 和 `@peterflow-en` 下各发布 11 项，使用专门签发、可单独撤销的 `CLAWHUB_TOKEN`。发布脚本只接受名单内已核对的许可证。含第三方 MIT 署名的 10 项通过各语言的 GitHub 和 skills.sh 单独分发，也保留在 MIT 整包中。[ClawHub 单项许可](https://github.com/openclaw/clawhub/blob/main/docs/skill-format.md#license) · [来源与致谢](THIRD_PARTY_NOTICES.md)
+推送到 `main` 后，GitHub Actions 先运行测试，再使用原仓库的 `CLAWHUB_TOKEN` 更新同一 ClawHub 插件的语言标签。英文版使用 `en` 和默认标签 `latest`，中文版使用 `zh`。工作流按文件内容判断变更，并逐项比对发布文件的 SHA-256。skills CLI 从原仓库的语言目录读取单项。
