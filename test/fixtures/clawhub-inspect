@@ -8,6 +8,7 @@ import sys
 owner, name = sys.argv[sys.argv.index("inspect") + 1].removeprefix("@").split("/")
 source, = (Path("plugins") / owner / "skills").glob("*/" + name)
 assert "CLAWHUB_SKILL_TOKEN" not in os.environ
+assert Path(os.environ["CLAWHUB_CONFIG_PATH"]) == Path(__file__).with_name("release-session.json")
 files = [{"path": p.relative_to(source).as_posix(), "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
          for p in source.rglob("*") if p.is_file() and p.name != ".DS_Store" and p.suffix != ".pyc"]
 files.append({"path": "skill-card.md", "sha256": "a" * 64})

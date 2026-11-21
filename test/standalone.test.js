@@ -30,13 +30,14 @@ test('each catalog lists 21 MIT skills and only the 11 approved native ClawHub e
   }
 });
 
-test('anonymous verification accepts the registry-generated Skill Card and detects other extra files', t => {
+test('verification keeps the signed-in session, accepts the Skill Card and detects other extra files', t => {
   const bin = mkdtempSync(join(tmpdir(), 'peterflow-public-check-'));
   t.after(() => rmSync(bin, { recursive: true, force: true }));
   copyFileSync(join(root, 'test/fixtures/clawhub-inspect'), join(bin, 'clawhub'));
   chmodSync(join(bin, 'clawhub'), 0o755);
   const args = [join(root, 'scripts/sync-clawhub-skills.mjs'), 'en', 'a'.repeat(40), '--check'];
-  const env = { ...process.env, PATH: bin + delimiter + process.env.PATH, CLAWHUB_SKILL_TOKEN: 'fixture' };
+  const env = { ...process.env, PATH: bin + delimiter + process.env.PATH,
+    CLAWHUB_CONFIG_PATH: join(bin, 'release-session.json'), CLAWHUB_SKILL_TOKEN: 'fixture' };
   const result = execFileSync(process.execPath, args, { cwd: root, env, encoding: 'utf8' });
   assert.equal(result.match(/Verified public/g).length, 11);
   const extra = spawnSync(process.execPath, args, { cwd: root, encoding: 'utf8', env: { ...env, PETERFLOW_TEST_EXTRA_FILE: 'plan' } });

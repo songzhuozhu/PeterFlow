@@ -1,8 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join, relative, sep } from 'node:path';
+import { relative, sep } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { isDeepStrictEqual, parseArgs } from 'node:util';
 import { nativeClawHubSkills, fileHashes } from './standalone-skills.mjs';
@@ -16,13 +14,11 @@ if (!/^[a-f0-9]{40}$/.test(commit) || extra.length || (publish && check)) {
 const skills = nativeClawHubSkills(lang);
 const owner = `peterflow-${lang}`;
 const registry = 'https://clawhub.ai';
-const anonymous = mkdtempSync(join(tmpdir(), 'peterflow-public-read-'));
 const { CLAWHUB_SKILL_TOKEN: statusToken, ...cliEnv } = process.env;
-const publicEnv = { ...cliEnv, CLAWHUB_CONFIG_PATH: join(anonymous, 'anonymous.json') };
 
-function cli(args, env = cliEnv) {
+function cli(args) {
   return JSON.parse(execFileSync('clawhub', ['--registry', registry, '--no-input', ...args, '--json'], {
-    env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'],
+    env: cliEnv, encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'],
   }));
 }
 
@@ -54,7 +50,7 @@ async function stage(name, version) {
 
 function publicFiles(name, version) {
   const ref = `@${owner}/${name}`;
-  const detail = cli(['inspect', ref, '--tag', 'latest', '--files'], publicEnv);
+  const detail = cli(['inspect', ref, '--tag', 'latest', '--files']);
   assert.equal(detail.owner?.handle, owner, ref);
   assert.equal(detail.skill?.slug, name, ref);
   assert.ok(detail.version?.version, ref);
@@ -112,8 +108,8 @@ async function submit(skill, completedVersion) {
   waiting.set(name, { skill, version: plan.version, previousSubmission });
 }
 
-const failures = [];
-try {
+async function syncSkills() {
+  const failures = [];
   if (publish && !statusToken) throw new Error('Publishing requires CLAWHUB_SKILL_TOKEN.');
   for (const skill of skills) {
     try {
@@ -152,6 +148,6 @@ try {
     await delay(15_000);
   }
   if (failures.length) throw new AggregateError(failures, `Could not sync ${owner}`);
-} finally {
-  rmSync(anonymous, { recursive: true, force: true });
 }
+
+await syncSkills();

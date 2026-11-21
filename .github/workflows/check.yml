@@ -55,38 +55,35 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/clawhub-cli" --ignore-scripts --no-audit --no-fund clawhub@0.27.0
           echo "$RUNNER_TEMP/clawhub-cli/node_modules/.bin" >> "$GITHUB_PATH"
-      - name: Sync the language bundle
-        if: steps.main.outputs.current == 'true' && matrix.target == 'bundle'
+      - name: Sign in to ClawHub as songzhuozhu
+        if: steps.main.outputs.current == 'true'
         env:
           CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
           CLAWHUB_CONFIG_PATH: ${{ runner.temp }}/clawhub-auth.json
-          LANG_CODE: ${{ matrix.lang }}
         run: |
-          if [[ -z "$CLAWHUB_TOKEN" ]]; then
-            echo 'ClawHub CI publishing is not configured. Checking the existing public bundle.'
-            node scripts/sync-clawhub.mjs "$LANG_CODE" "$GITHUB_SHA" --check
-            exit 0
-          fi
-          trap 'rm -f "$CLAWHUB_CONFIG_PATH"' EXIT
+          : "${CLAWHUB_TOKEN:?Configure the songzhuozhu ClawHub release token}"
           clawhub --registry https://clawhub.ai --no-input login --no-browser --token "$CLAWHUB_TOKEN"
           unset CLAWHUB_TOKEN
-          node scripts/sync-clawhub.mjs "$LANG_CODE" "$GITHUB_SHA" --publish
+          account=$(clawhub --registry https://clawhub.ai --no-input whoami)
+          if [[ "$account" != songzhuozhu ]]; then
+            echo "Expected ClawHub publisher songzhuozhu, got $account" >&2
+            exit 1
+          fi
+          echo "CLAWHUB_CONFIG_PATH=$CLAWHUB_CONFIG_PATH" >> "$GITHUB_ENV"
+      - name: Sync the language bundle
+        if: steps.main.outputs.current == 'true' && matrix.target == 'bundle'
+        env:
+          LANG_CODE: ${{ matrix.lang }}
+        run: node scripts/sync-clawhub.mjs "$LANG_CODE" "$GITHUB_SHA" --publish
       - name: Publish individual skills under the edition publisher
         if: steps.main.outputs.current == 'true' && matrix.target == 'skills'
         env:
           CLAWHUB_SKILL_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
-          CLAWHUB_CONFIG_PATH: ${{ runner.temp }}/clawhub-auth.json
-          CLAWHUB_REGISTRY: https://clawhub.ai
           LANG_CODE: ${{ matrix.lang }}
-        run: |
-          if [[ -z "$CLAWHUB_SKILL_TOKEN" ]]; then
-            echo 'ClawHub CI publishing is not configured. Checking the existing public skills.'
-            node scripts/sync-clawhub-skills.mjs "$LANG_CODE" "$GITHUB_SHA" --check
-            exit 0
-          fi
-          trap 'rm -f "$CLAWHUB_CONFIG_PATH"' EXIT
-          clawhub --registry "$CLAWHUB_REGISTRY" --no-input login --no-browser --token "$CLAWHUB_SKILL_TOKEN"
-          node scripts/sync-clawhub-skills.mjs "$LANG_CODE" "$GITHUB_SHA" --publish
+        run: node scripts/sync-clawhub-skills.mjs "$LANG_CODE" "$GITHUB_SHA" --publish
+      - name: Remove the runner's ClawHub session
+        if: always() && steps.main.outputs.current == 'true'
+        run: rm -f "$RUNNER_TEMP/clawhub-auth.json"
 
   skills-sh:
     needs: check
