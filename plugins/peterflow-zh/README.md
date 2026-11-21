@@ -3,8 +3,8 @@
 按原名选择中文 Skill。安装整套时使用同一目录并选择全部 21 项。
 
 ```sh
-npx skills add https://github.com/songzhuozhu/PeterFlow/tree/main/plugins/peterflow-zh/skills --skill code-review
-npx skills add https://github.com/songzhuozhu/PeterFlow/tree/main/plugins/peterflow-zh/skills --skill '*'
+npx skills add https://songzhuozhu.github.io/PeterFlow/ --skill code-review
+npx skills add https://songzhuozhu.github.io/PeterFlow/ --skill '*'
 ```
 
 [整包与使用指南](https://github.com/songzhuozhu/PeterFlow/blob/main/README.zh-CN.md) · [MIT](LICENSE) · [来源与致谢](https://github.com/songzhuozhu/PeterFlow/blob/main/THIRD_PARTY_NOTICES.md)

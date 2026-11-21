@@ -1,0 +1,32 @@
+name: Publish the Chinese skills source
+on:
+  push:
+    branches: [main]
+    paths: ['plugins/peterflow-zh/skills/**', 'scripts/build-skill-site.py', 'scripts/skill-site.html', '.github/workflows/pages.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: peterflow-pages
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'songzhuozhu/PeterFlow' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 scripts/build-skill-site.py "$RUNNER_TEMP/peterflow-site"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/peterflow-site
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -103,7 +103,7 @@ openclaw plugins install clawhub:@songzhuozhu/peterflow@zh
 Select a skill by its original name from the English source directory. Replace `code-review` with the skill you want. [21 English skills](plugins/peterflow-en/README.md)
 
 ```sh
-npx skills add https://github.com/songzhuozhu/PeterFlow/tree/main/plugins/peterflow-en/skills --skill code-review
+npx skills add songzhuozhu/PeterFlow --skill code-review
 ```
 
 ### Ask your agent to install PeterFlow
@@ -292,4 +292,4 @@ If your team already has a document compatibility guide, add a line to `AGENTS.m
 
 To contribute a skill improvement, include a request that shows the behavior you want to change and what a good result looks like. Edit the corresponding files under `plugins/peterflow-en/skills/` and `plugins/peterflow-zh/skills/`, then run `npm test` to check the package, terminal installer and helpers. [MIT license](LICENSE) · [Upstream credits](THIRD_PARTY_NOTICES.md)
 
-On a push to `main`, GitHub Actions runs the tests and publishes the changed language tags on the same ClawHub plugin using the repository’s `CLAWHUB_TOKEN`. English uses `en` and the default `latest` tag. Chinese uses `zh`. The workflow compares file hashes before releasing and verifies the SHA-256 of every published file. The skills CLI reads individual skills from their language directory in this repository.
+On a push to `main`, GitHub Actions runs the tests and publishes the changed language tags on the same ClawHub plugin using the repository’s `CLAWHUB_TOKEN`. English uses `en` and the default `latest` tag. Chinese uses `zh`. The workflow compares file hashes before releasing and verifies the SHA-256 of every published file. The English skills are discoverable from the repository. Its Pages workflow builds the Chinese source from the same commit’s skill files, including their licenses and resources. [Choose an installation language](https://songzhuozhu.github.io/PeterFlow/)

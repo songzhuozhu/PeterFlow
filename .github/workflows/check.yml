@@ -17,6 +17,13 @@ jobs:
         with:
           python-version: '3.11'
       - run: npm test
+      - name: Verify individual skills from the repository
+        if: matrix.node == 24
+        run: |
+          npm install --prefix "$RUNNER_TEMP/skills-cli" --ignore-scripts --no-audit --no-fund skills@1.9.0
+          export PATH="$RUNNER_TEMP/skills-cli/node_modules/.bin:$PATH"
+          node scripts/check-skills-sh.mjs en "$GITHUB_WORKSPACE"
+          node scripts/check-skills-sh.mjs zh "$GITHUB_WORKSPACE/plugins/peterflow-zh/skills"
 
   clawhub:
     name: Publish PeterFlow on ClawHub

@@ -100,10 +100,10 @@ openclaw plugins install clawhub:@songzhuozhu/peterflow@en
 
 ### 用 skills CLI 安装单项
 
-从原仓库的中文目录按名称选择 Skill。把 `code-review` 换成需要的名称即可。[21 项中文目录](plugins/peterflow-zh/README.md)
+从原仓库生成的中文发布源按名称选择 Skill。把 `code-review` 换成需要的名称即可。[21 项中文目录](plugins/peterflow-zh/README.md)
 
 ```sh
-npx skills add https://github.com/songzhuozhu/PeterFlow/tree/main/plugins/peterflow-zh/skills --skill code-review
+npx skills add https://songzhuozhu.github.io/PeterFlow/ --skill code-review
 ```
 
 ### 让 Agent 安装
@@ -292,4 +292,4 @@ claude plugin install peterflow-zh@peterflow
 
 欢迎用一个实际案例改进 Skill，比如“一条会触发错误行为的请求，以及你希望看到的结果”。中英文实现分别在 `plugins/peterflow-zh/skills/` 和 `plugins/peterflow-en/skills/`。改动后运行 `npm test` 可检查安装包、终端向导和随包脚本。[MIT 许可](LICENSE) · [上游来源与致谢](THIRD_PARTY_NOTICES.md)
 
-推送到 `main` 后，GitHub Actions 先运行测试，再使用原仓库的 `CLAWHUB_TOKEN` 更新同一 ClawHub 插件的语言标签。英文版使用 `en` 和默认标签 `latest`，中文版使用 `zh`。工作流按文件内容判断变更，并逐项比对发布文件的 SHA-256。skills CLI 从原仓库的语言目录读取单项。
+推送到 `main` 后，GitHub Actions 先运行测试，再使用原仓库的 `CLAWHUB_TOKEN` 更新同一 ClawHub 插件的语言标签。英文版使用 `en` 和默认标签 `latest`，中文版使用 `zh`。工作流按文件内容判断变更，并逐项比对发布文件的 SHA-256。英文单项从原仓库发现。中文文件由同一仓库的 Pages 工作流发布，保留原名、许可证和配套文件。[选择语言安装](https://songzhuozhu.github.io/PeterFlow/)

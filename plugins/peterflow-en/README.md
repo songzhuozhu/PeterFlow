@@ -3,8 +3,8 @@
 Select an English skill by its original name. Use the same source and select all 21 skills to install the whole set.
 
 ```sh
-npx skills add https://github.com/songzhuozhu/PeterFlow/tree/main/plugins/peterflow-en/skills --skill code-review
-npx skills add https://github.com/songzhuozhu/PeterFlow/tree/main/plugins/peterflow-en/skills --skill '*'
+npx skills add songzhuozhu/PeterFlow --skill code-review
+npx skills add songzhuozhu/PeterFlow --skill '*'
 ```
 
 [Plugin and usage guide](https://github.com/songzhuozhu/PeterFlow/blob/main/README.md) · [MIT](LICENSE) · [Upstream credits](https://github.com/songzhuozhu/PeterFlow/blob/main/THIRD_PARTY_NOTICES.md)

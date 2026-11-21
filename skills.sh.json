@@ -1,0 +1,34 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "paths": [
+    "./plugins/peterflow-en/skills"
+  ],
+  "groupings": [
+    {
+      "title": "English",
+      "skills": [
+        "analyze",
+        "ask-peter",
+        "code-review",
+        "context-handoff",
+        "converge",
+        "debug-expert",
+        "design-mod",
+        "feature-retcon",
+        "implement",
+        "implement-pro",
+        "learn",
+        "maintain-standards",
+        "plainly",
+        "plan",
+        "quickstart",
+        "research",
+        "retro",
+        "review-arch",
+        "tasks",
+        "tasks-pro",
+        "writing-for-agents"
+      ]
+    }
+  ]
+}

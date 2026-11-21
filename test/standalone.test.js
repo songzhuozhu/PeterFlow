@@ -20,7 +20,8 @@ test('each language catalog lists the 21 skills and preserves their native publi
     const native = nativeClawHubSkills(lang).map(skill => skill.name);
     assert.deepEqual(native.toSorted(), ['analyze', 'context-handoff', 'converge', 'feature-retcon',
       'implement', 'implement-pro', 'maintain-standards', 'plan', 'quickstart', 'tasks', 'tasks-pro']);
-    assert.ok(guide.includes(`https://github.com/songzhuozhu/PeterFlow/tree/main/plugins/${owner}/skills --skill code-review`));
+    const source = lang === 'zh' ? 'https://songzhuozhu.github.io/PeterFlow/' : 'songzhuozhu/PeterFlow';
+    assert.ok(guide.includes(`npx skills add ${source} --skill code-review`));
     assert.deepEqual(readFileSync(join(dir, 'LICENSE')), readFileSync(join(root, 'LICENSE')));
   }
 });
