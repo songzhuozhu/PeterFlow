@@ -1,6 +1,6 @@
 {
   "name": "peterflow-zh",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "从计划走到可验证的交付，按需使用评审、变更恢复与上下文交接。",
   "author": {
     "name": "PeterFlow contributors"

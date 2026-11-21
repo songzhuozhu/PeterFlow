@@ -16,6 +16,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Check release tag against the package version
+        if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+        run: |
+          expected="v$(node -p "require('./package.json').version")"
+          if [[ "$GITHUB_REF_NAME" != "$expected" ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package version $expected"
+            exit 1
+          fi
       - run: npm test
       - name: Verify individual skills from the repository
         if: matrix.node == 24

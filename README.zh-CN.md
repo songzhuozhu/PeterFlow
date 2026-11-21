@@ -159,6 +159,12 @@ claude plugin install peterflow-zh@peterflow
 
 直接注册本地仓库时，请保留该目录。从 npm 压缩包安装原生插件时，向导会将市场文件保存在 `~/.peterflow/marketplace/`。
 
+通过 npx 安装的 Codex 插件使用本地市场快照。升级时用目标发布标签重新运行安装器，以刷新快照并安装新版。例如，发布 `v0.1.3` 后，中文版可运行：
+
+```sh
+npx --allow-git=root 'github:songzhuozhu/PeterFlow#v0.1.3' --lang zh-CN --plugin --agent codex
+```
+
 初版曾在 macOS 上从实际 npm 压缩包试装。Codex CLI 0.166.0 和 Claude Code 2.1.328 均识别出每种语言的 21 项 Skill。
 
 </details>
