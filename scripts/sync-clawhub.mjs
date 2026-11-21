@@ -14,6 +14,7 @@ if (!['en', 'zh'].includes(lang) || !/^[a-f0-9]{40}$/.test(commit) || extra.leng
   throw new Error('Usage: node scripts/sync-clawhub.mjs <en|zh> <full Git commit> [--publish | --check] [--out directory]');
 }
 const name = '@songzhuozhu/peterflow';
+const scanWaitSeconds = 3600;
 const source = `plugins/peterflow-${lang}`;
 const suffix = lang === 'zh' ? '-zh' : '';
 const guide = lang === 'zh' ? 'README.zh-CN.md' : 'README.md';
@@ -75,7 +76,7 @@ function saveArchive(version) {
 }
 
 async function publicationState(version) {
-  const deadline = Date.now() + 15 * 60_000;
+  const deadline = Date.now() + scanWaitSeconds * 1000;
   let state;
   try {
     state = clawhub('publication', name, '--version', version).state;
@@ -135,7 +136,7 @@ async function sync() {
       '--owner', 'songzhuozhu', '--name', name, '--display-name', 'PeterFlow',
       '--version', next, '--source-repo', repo, '--source-commit', commit, '--source-ref', 'main', '--source-path', source,
       '--changelog', `PeterFlow (${lang}) · https://github.com/${repo}/commit/${commit}`, '--tags', lang === 'en' ? 'en,latest' : 'zh'];
-    const result = clawhub(...args, ...(publish ? ['--wait', '--wait-timeout', '900'] : ['--dry-run']));
+    const result = clawhub(...args, ...(publish ? ['--wait', '--wait-timeout', String(scanWaitSeconds)] : ['--dry-run']));
     if (result.name !== name || result.version !== next || result.files !== Object.keys(fileHashes(bundle)).length) {
       throw new Error(`Unexpected ClawHub package inventory: ${JSON.stringify(result)}`);
     }

@@ -30,7 +30,7 @@ jobs:
     needs: check
     if: github.repository == 'songzhuozhu/PeterFlow' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 240
     concurrency:
       group: peterflow-clawhub
       queue: max
@@ -75,8 +75,11 @@ jobs:
       - name: Publish both language tags of the same plugin
         if: steps.main.outputs.current == 'true'
         run: |
-          node scripts/sync-clawhub.mjs en "$GITHUB_SHA" --publish
-          node scripts/sync-clawhub.mjs zh "$GITHUB_SHA" --publish
+          failed=0
+          for lang in en zh; do
+            node scripts/sync-clawhub.mjs "$lang" "$GITHUB_SHA" --publish || failed=1
+          done
+          exit "$failed"
       - name: Remove the runner's ClawHub session
         if: always() && steps.main.outputs.current == 'true'
         run: rm -f "$RUNNER_TEMP/clawhub-auth.json"
