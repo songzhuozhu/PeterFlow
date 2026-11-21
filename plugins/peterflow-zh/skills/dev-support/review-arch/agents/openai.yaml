@@ -1,5 +1,5 @@
 interface:
-  display_name: "架构巡检"
+  display_name: "review-arch"
   short_description: "按需查找架构改进机会，用前后对照图比较候选，并深入讨论选中的方案"
 policy:
   allow_implicit_invocation: false

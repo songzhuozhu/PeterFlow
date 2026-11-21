@@ -1,2 +1,5 @@
+interface:
+  display_name: "shuorenhua"
+
 policy:
   allow_implicit_invocation: true

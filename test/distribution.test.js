@@ -68,10 +68,14 @@ test('marketplaces, versions, skill names and on-demand resources match both edi
       const name = basename(folder);
       const body = readFileSync(join(skills, folder, 'SKILL.md'), 'utf8');
       assert.equal(body.match(/^name: (.+)$/m)?.[1], name);
+      if (id === 'peterflow-zh') {
+        const metadata = readFileSync(join(skills, folder, 'agents/openai.yaml'), 'utf8');
+        assert.equal(metadata.match(/^  display_name: "([^"]+)"$/m)?.[1], name);
+      }
       assert.ok(body.match(/^description: .+$/m), name);
       assert.ok(existsSync(join(skills, folder, 'LICENSE')), folder);
     }
-    locales.push(files(skills).map(p => p.replace(join('daily-work', 'plainly') + sep, join('daily-work', 'shuorenhua') + sep)).sort());
+    locales.push(files(skills).filter(p => !p.endsWith(join('agents', 'openai.yaml'))).map(p => p.replace(join('daily-work', 'plainly') + sep, join('daily-work', 'shuorenhua') + sep)).sort());
   }
   assert.deepEqual(locales[0], locales[1]);
 });

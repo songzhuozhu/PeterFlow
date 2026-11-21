@@ -1,2 +1,5 @@
+interface:
+  display_name: "retro"
+
 policy:
   allow_implicit_invocation: false

@@ -87,17 +87,6 @@
 
 ## 安装
 
-### 安装 PeterFlow 合集
-
-在 ClawHub 上选择同一插件的语言标签。每次安装包含对应语言的全部 21 个 Skill，其中包括 `feature-retcon`。[PeterFlow 插件](https://clawhub.ai/songzhuozhu/plugins/peterflow)
-
-```sh
-# 简体中文
-openclaw plugins install clawhub:@songzhuozhu/peterflow@zh
-# English
-openclaw plugins install clawhub:@songzhuozhu/peterflow@en
-```
-
 ### 用 skills CLI 安装单项
 
 从原仓库生成的中文发布源按名称选择 Skill。把 `code-review` 换成需要的名称即可。[21 项中文目录](plugins/peterflow-zh/README.md)

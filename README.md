@@ -87,17 +87,6 @@ After a session, use `retro` to revisit corrections, commands and results and ch
 
 ## Install
 
-### Install the PeterFlow collection
-
-Choose a language tag on the same ClawHub plugin. Each installs all 21 skills in that language, including `feature-retcon`. [PeterFlow plugin](https://clawhub.ai/songzhuozhu/plugins/peterflow)
-
-```sh
-# English
-openclaw plugins install clawhub:@songzhuozhu/peterflow@en
-# 简体中文
-openclaw plugins install clawhub:@songzhuozhu/peterflow@zh
-```
-
 ### Install one skill with the skills CLI
 
 Select a skill by its original name from the English source directory. Replace `code-review` with the skill you want. [21 English skills](plugins/peterflow-en/README.md)
