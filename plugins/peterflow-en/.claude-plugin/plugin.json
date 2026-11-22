@@ -1,6 +1,6 @@
 {
   "name": "peterflow-en",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Bring a feature from a plan to tested code, with skills for review, recovery and handoff.",
   "author": {
     "name": "PeterFlow contributors"

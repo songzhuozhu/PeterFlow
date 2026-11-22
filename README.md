@@ -2,7 +2,7 @@
 
 # PeterFlow · Workflow skills for coding agents
 
-**English** · [简体中文](README.zh-CN.md) · [Design principles](#design-principles) · [Install](#install) · [Find a skill](#the-21-skills)
+**English** · [简体中文](README.zh-CN.md) · [Design principles](#design-principles) · [Install](#install) · [Find a skill](#the-22-skills)
 
 I've spent nearly a year vibe coding and trying open-source development workflows. For spec-driven development, I drew on [Spec Kit](https://github.com/github/spec-kit) and [OpenSpec](https://github.com/Fission-AI/OpenSpec) to go from a requirement to a set of tasks. [GSD Core](https://github.com/open-gsd/gsd-core) influenced how I check a phase before moving on. [Compound Engineering](https://github.com/EveryInc/compound-engineering-plugin) showed me how to put a lesson from code review to use on the next change. Several of the engineering and teaching skills here are adaptations of [Matt Pocock's skills](https://github.com/mattpocock/skills).
 
@@ -13,6 +13,8 @@ Thank you to the authors and contributors who shared how they work. I took the p
 ## Design principles
 
 ### Match the workflow to the task’s complexity
+
+If you have an idea or people expect different results from the same action, use `spec` to settle the requirements and acceptance scenarios. Start with `plan` when the expected behavior is already clear.
 
 Choose a workflow based on the scope of the change and how hard it will be to verify. For a small fix, a short workflow saves the time and tokens it takes to split up the work and write handoffs. As a feature grows, a missed case can cost more to fix later. That makes it worth building and checking the feature in phases. When tasks have several dependencies, use `analyze` after the breakdown to check for gaps. When a change spans entry points or phases, use `converge` after implementation to compare test results with the acceptance criteria. Choose either check independently.
 
@@ -89,7 +91,7 @@ After a session, use `retro` to revisit corrections, commands and results and ch
 
 ### Install one skill with the skills CLI
 
-Select a skill by its original name from the English source directory. Replace `code-review` with the skill you want. [21 English skills](plugins/peterflow-en/README.md)
+Select a skill by its original name from the English source directory. Replace `code-review` with the skill you want. [22 English skills](plugins/peterflow-en/README.md)
 
 ```sh
 npx skills add songzhuozhu/PeterFlow --skill code-review
@@ -143,7 +145,7 @@ npx --allow-git=root https://github.com/songzhuozhu/PeterFlow --lang en --agent 
 npx --allow-git=root https://github.com/songzhuozhu/PeterFlow --lang en --agent trae-cn --global --group daily-work
 ```
 
-Use `--all` for all 21 skills in that language, or repeat `--group` to combine groups. Codex and Claude Code also offer native plugin installs with `--lang en --agent codex --plugin` and `--lang en --agent claude --plugin`, respectively.
+Use `--all` for all 22 skills in that language, or repeat `--group` to combine groups. Codex and Claude Code also offer native plugin installs with `--lang en --agent codex --plugin` and `--lang en --agent claude --plugin`, respectively.
 
 To install the English edition with your host’s plugin manager, run the corresponding pair of commands from the checkout.
 
@@ -169,11 +171,15 @@ Keep your current plan, task list and verification records. The default location
 
 Multi-agent work requires a host that can provide separate execution contexts. The bundled dependency, review and recovery helpers use Python 3.9+ and its standard library. The recovery journal requires a filesystem that supports private file permissions.
 
-## The 21 skills
+## The 22 skills
 
-[Development workflow (7)](#dev) · [Engineering support (7)](#dev-support) · [Everyday work (3)](#daily-work) · [Working with agents (4)](#agent-collab)
+[Development workflow (8)](#dev) · [Engineering support (7)](#dev-support) · [Everyday work (3)](#daily-work) · [Working with agents (4)](#agent-collab)
 
 ### dev
+
+#### [spec](plugins/peterflow-en/skills/dev/spec/SKILL.md) · Turn an idea into testable requirements
+
+Start with “Keep the draft if sending fails,” then describe what you want over several turns. Bring references if you have them. Once you invite questions, the agent follows up on anything your description and references left open, such as “Should the text still be there after the user closes the page and comes back?” Each agreed answer goes into the same spec.
 
 #### [plan](plugins/peterflow-en/skills/dev/plan/SKILL.md) · Decide what to change and how to check it
 

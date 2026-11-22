@@ -1,6 +1,6 @@
 # PeterFlow · English skills
 
-Select an English skill by its original name. Use the same source and select all 21 skills to install the whole set.
+Select an English skill by its original name. Use the same source and select all 22 skills to install the whole set.
 
 ```sh
 npx skills add songzhuozhu/PeterFlow --skill code-review
@@ -11,6 +11,7 @@ npx skills add songzhuozhu/PeterFlow --skill '*'
 
 | Skill | When to use it |
 | --- | --- |
+| [spec](skills/dev/spec/SKILL.md) | Turn an idea into agreed requirements and acceptance scenarios |
 | [plan](skills/dev/plan/SKILL.md) | Decide what to change and how to check it |
 | [tasks](skills/dev/tasks/SKILL.md) | Break a plan into steps |
 | [implement](skills/dev/implement/SKILL.md) | Carry out the plan |

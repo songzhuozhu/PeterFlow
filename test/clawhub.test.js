@@ -52,7 +52,7 @@ test('one plugin starts from an empty registry and keeps language tags independe
   for (const lang of ['zh', 'en']) {
     const pkg = read()[name];
     const files = pkg.versions[pkg.tags[lang]].files;
-    assert.equal(files.filter(f => f.path.endsWith('/SKILL.md')).length, 21);
+    assert.equal(files.filter(f => f.path.endsWith('/SKILL.md')).length, 22);
     const contract = 'skills/dev-support/feature-retcon/scripts/contract.py';
     const expected = readFileSync(join(dir, 'plugins', 'peterflow-' + lang, contract));
     assert.equal(files.find(f => f.path === contract).sha256, createHash('sha256').update(expected).digest('hex'));

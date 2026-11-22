@@ -1,6 +1,6 @@
 # PeterFlow · 中文单项 Skill
 
-按原名选择中文 Skill。安装整套时使用同一目录并选择全部 21 项。
+按原名选择中文 Skill。安装整套时使用同一目录并选择全部 22 项。
 
 ```sh
 npx skills add https://songzhuozhu.github.io/PeterFlow/ --skill code-review
@@ -11,6 +11,7 @@ npx skills add https://songzhuozhu.github.io/PeterFlow/ --skill '*'
 
 | Skill | 用途 |
 | --- | --- |
+| [spec](skills/dev/spec/SKILL.md) | 理清需求，把用户确认的行为写成验收场景 |
 | [plan](skills/dev/plan/SKILL.md) | 先定怎么改、怎么验 |
 | [tasks](skills/dev/tasks/SKILL.md) | 把方案拆成能动手的几步 |
 | [implement](skills/dev/implement/SKILL.md) | 照着计划动手 |

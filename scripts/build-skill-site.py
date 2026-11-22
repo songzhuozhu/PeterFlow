@@ -37,8 +37,8 @@ def build(output):
         digest = hashlib.sha256(archive.read_bytes()).hexdigest()
         entries.append(dict(name=name, type="archive", description=summary, url=archive.name, digest=f"sha256:{digest}"))
 
-    if len(entries) != 21 or len({entry["name"] for entry in entries}) != 21:
-        raise ValueError("Expected 21 distinct PeterFlow skills in Chinese")
+    if len(entries) != 22 or len({entry["name"] for entry in entries}) != 22:
+        raise ValueError("Expected 22 distinct PeterFlow skills in Chinese")
     index = {"$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json", "skills": entries}
     (catalog / "index.json").write_text(json.dumps(index, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     (output / "index.html").write_text(Path("scripts/skill-site.html").read_text(encoding="utf-8"), encoding="utf-8")

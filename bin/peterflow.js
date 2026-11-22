@@ -21,6 +21,7 @@ const sections = [
     [5, 'implement-pro'],
     [6, 'analyze'],
     [7, 'converge'],
+    [22, 'spec'],
   ]],
   ['dev-support', 'Engineering support', '工程辅助', [
     [11, 'feature-retcon'],
@@ -49,7 +50,7 @@ const help = `PeterFlow — install engineering skills for coding agents
   peterflow                                 Choose skills, agent and scope with the keyboard
   peterflow --lang en plan implement         Install two skills in this Codex project
   peterflow --lang zh-CN --group daily-work  Install the three everyday skills
-  peterflow --lang en --plugin --agent codex  Install all 21 as a native plugin
+  peterflow --lang en --plugin --agent codex  Install the English edition as a native plugin
   peterflow --lang zh-CN --agent claude --global --all
   peterflow --lang en --agent cursor --group dev
   peterflow --list-agents
@@ -174,7 +175,7 @@ async function keyboardWizard(options) {
     if (!options.plugin && !options.dir && !options.global) {
       mode = await menu(zh ? '安装内容' : 'What would you like to install?', [
         { value: 'pick', label: zh ? '按分组或单个 Skill 勾选' : 'Choose groups and individual skills' },
-        { value: 'all', label: zh ? '全部 21 项独立 Skill' : 'All 21 standalone skills' },
+        { value: 'all', label: zh ? `全部 ${skills.length} 项独立 Skill` : `All ${skills.length} standalone skills` },
         ...(canChoosePlugin ? [{ value: 'plugin', label: zh ? '原生插件 · Codex 或 Claude Code' : 'Native plugin · Codex or Claude Code' }] : []),
       ], { zh });
     }
@@ -270,8 +271,8 @@ async function lineWizard(options) {
         modes.push('1', 'plugin');
       }
       console.log(zh
-        ? '  2  独立 Skill · 挑选需要的几项\n  3  独立 Skill · 安装全部 21 项\n  4  按分组安装 · 可多选'
-        : '  2  Standalone skills · pick individual skills\n  3  Standalone skills · install all 21\n  4  Install by group · pick one or more');
+        ? `  2  独立 Skill · 挑选需要的几项\n  3  独立 Skill · 安装全部 ${skills.length} 项\n  4  按分组安装 · 可多选`
+        : `  2  Standalone skills · pick individual skills\n  3  Standalone skills · install all ${skills.length}\n  4  Install by group · pick one or more`);
       const mode = await choose(zh ? '安装方式 [2] › ' : 'Install mode [2] › ', modes);
       if (mode === '1' || mode === 'plugin') return await pluginChoice();
       if (mode === '3' || mode === 'all') selected = skills;

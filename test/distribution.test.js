@@ -62,7 +62,7 @@ test('marketplaces, versions, skill names and on-demand resources match both edi
       if (host === '.claude-plugin') assert.deepEqual(manifest.skills.toSorted(), groups.map(group => './skills/' + group));
     }
     const folders = skillFolders(skills);
-    assert.equal(folders.length, 21);
+    assert.equal(folders.length, 22);
     for (const folder of folders) {
       assert.ok(groups.includes(dirname(folder)), folder);
       const name = basename(folder);
@@ -151,7 +151,7 @@ test('npm pack and offline npx install complete standalone bundles in both langu
 test('each group installs exactly its catalog members in either language', t => {
   const dir = temp(t);
   const members = {
-    dev: ['analyze', 'converge', 'implement', 'implement-pro', 'plan', 'tasks', 'tasks-pro'],
+    dev: ['analyze', 'converge', 'implement', 'implement-pro', 'plan', 'spec', 'tasks', 'tasks-pro'],
     'dev-support': ['code-review', 'debug-expert', 'design-mod', 'feature-retcon', 'maintain-standards', 'retro', 'review-arch'],
     'agent-collab': ['ask-peter', 'context-handoff', 'quickstart', 'writing-for-agents'],
   };

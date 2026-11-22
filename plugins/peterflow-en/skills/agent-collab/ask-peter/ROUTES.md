@@ -2,6 +2,7 @@
 
 | Starting point | Next step |
 | --- | --- |
+| A feature idea or draft still leaves user outcomes open | Use `spec` to settle scope, terms and acceptance scenarios. Go directly to planning when the expected behavior is clear. |
 | A bounded change with clear acceptance | `plan → implement`. Continue directly from a usable short plan. |
 | Dependent tasks in one implementation context | `plan → tasks → implement`. Resume at the existing plan or ready task. |
 | Independent implementation, review and test contexts | `plan → tasks-pro → implement-pro`. The last skill includes review, testing and final integrated acceptance. |

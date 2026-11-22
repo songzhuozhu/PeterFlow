@@ -2,7 +2,7 @@
 
 # PeterFlow · 给编程 Agent 用的工作流 Skills
 
-[English](README.md) · **简体中文** · [三条设计哲学](#三条设计哲学) · [安装](#安装) · [按需选 Skill](#全部-21-个-skill)
+[English](README.md) · **简体中文** · [三条设计哲学](#三条设计哲学) · [安装](#安装) · [按需选 Skill](#全部-22-个-skill)
 
 我做 vibe coding 快一年了。这段时间，我试过不少开源开发工作流。做规格驱动开发时，我借鉴了 [Spec Kit](https://github.com/github/spec-kit) 和 [OpenSpec](https://github.com/Fission-AI/OpenSpec) 写需求、拆任务的做法。[GSD Core](https://github.com/open-gsd/gsd-core) 给了我分阶段验收的思路，[Compound Engineering](https://github.com/EveryInc/compound-engineering-plugin) 让我看到，一次代码评审里学到的东西，也可以整理出来，留给下次开发用。PeterFlow 里也有几项工程和教学 Skill 直接改编自 [Matt Pocock 的 Skills](https://github.com/mattpocock/skills)。
 
@@ -13,6 +13,8 @@
 ## 三条设计哲学
 
 ### 按任务复杂度选工作流
+
+如果手里只有一个想法，或大家对同一个操作的预期不同，先用 `spec` 把需求和验收场景说清楚。预期已经明确时，可以直接从 `plan` 开始。
 
 选择工作流时，主要看改动范围有多大、验证起来有多难。小改动走短流程，能省下拆任务和交接的时间与 token。功能越大，漏掉一个场景后返工的代价往往越高，也就越值得分阶段实施和验收。任务之间依赖多时，可在拆完任务后用 `analyze` 查漏。改动涉及多个入口或阶段时，可在实现后用 `converge` 对照测试结果逐项核对验收条件。两步可以独立选用。
 
@@ -89,7 +91,7 @@
 
 ### 用 skills CLI 安装单项
 
-从原仓库生成的中文发布源按名称选择 Skill。把 `code-review` 换成需要的名称即可。[21 项中文目录](plugins/peterflow-zh/README.md)
+从原仓库生成的中文发布源按名称选择 Skill。把 `code-review` 换成需要的名称即可。[22 项中文目录](plugins/peterflow-zh/README.md)
 
 ```sh
 npx skills add https://songzhuozhu.github.io/PeterFlow/ --skill code-review
@@ -143,7 +145,7 @@ npx --allow-git=root https://github.com/songzhuozhu/PeterFlow --lang zh-CN --age
 npx --allow-git=root https://github.com/songzhuozhu/PeterFlow --lang zh-CN --agent trae-cn --global --group daily-work
 ```
 
-用 `--all` 装齐这一语言的 21 个 Skill，重复传入 `--group` 可以合装多组。Codex 和 Claude Code 另有原生插件安装方式，参数分别是 `--lang zh-CN --agent codex --plugin` 和 `--lang zh-CN --agent claude --plugin`。
+用 `--all` 装齐这一语言的 22 个 Skill，重复传入 `--group` 可以合装多组。Codex 和 Claude Code 另有原生插件安装方式，参数分别是 `--lang zh-CN --agent codex --plugin` 和 `--lang zh-CN --agent claude --plugin`。
 
 也可从源码目录注册插件市场，再用对应宿主安装中文版插件。
 
@@ -175,11 +177,15 @@ npx --allow-git=root 'github:songzhuozhu/PeterFlow#v0.1.3' --lang zh-CN --plugin
 
 多 Agent 分工需要宿主能提供独立的执行上下文。随包的依赖检查、评审回执和文件恢复工具使用 Python 3.9+ 标准库，恢复日志需要文件系统支持私有权限。
 
-## 全部 21 个 Skill
+## 全部 22 个 Skill
 
-[开发主线（7 项）](#dev) · [工程辅助（7 项）](#dev-support) · [日常工作（3 项）](#daily-work) · [与 Agent 协作（4 项）](#agent-collab)
+[开发主线（8 项）](#dev) · [工程辅助（7 项）](#dev-support) · [日常工作（3 项）](#daily-work) · [与 Agent 协作（4 项）](#agent-collab)
 
 ### dev
+
+#### [spec](plugins/peterflow-zh/skills/dev/spec/SKILL.md) · 把想法变成能验收的需求
+
+可以从“发送失败也要保留草稿”开始，分几轮讲清你想要的功能，有参考资料也可以一起给。等你说“可以反问了”，如果前面的描述和资料还没讲清草稿要留多久，Agent 才会追问“关掉页面再回来，还应该能看到原文吗？”你确认的答案会补进同一份规格。
 
 #### [plan](plugins/peterflow-zh/skills/dev/plan/SKILL.md) · 先定怎么改、怎么验
 

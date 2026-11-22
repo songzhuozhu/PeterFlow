@@ -5,7 +5,7 @@ description: Turn a feature request or change of direction into an implementatio
 
 # Plan a change
 
-Start with the result the user wants. Identify the workspace, scope, project instructions, current callers and existing tests. Inspect the working tree and index before proposing edits. Preserve ongoing work, including in a repository without a first commit.
+Start with the result the user wants. When a spec is available, carry its agreed rules and acceptance scenarios into the implementation and verification plan. Identify the workspace, scope, project instructions, current callers and existing tests. Inspect the working tree and index before proposing edits. Preserve ongoing work, including in a repository without a first commit.
 
 Use the user's or project's standards entry point (default `.peterflow/standards/`). Follow its main index (L3) to applicable team rules (L0) and engineering topics (L1). For product behavior, trace the actual callers and follow the feature index to the adopted L2 rule. Turn relevant clauses into acceptance criteria with their source, conditions and exceptions. Use proposals and archives only for background. Where no library exists, plan from the requirements at hand.
 
