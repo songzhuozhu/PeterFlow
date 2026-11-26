@@ -7,7 +7,9 @@ description: Split a large change into phases that fresh implementers, reviewers
 
 A phase is the execution unit. Keep its tasks, status and evidence in the original task list. Work from the existing goal, design, code, applicable project rules, `.peterflow/standards/` and prior verification. Use an existing equivalent location or a new `.peterflow/specs/<topic>/tasks.md`. Fill in only missing decisions that affect the split. Record the effect of an unresolved product decision.
 
-1. Map behaviors, external contracts and checks to requirements. Cut by observable outcome. Split off a shared prerequisite only when it has a deliverable and a check of its own.
+By default, scope tasks to development, review and testing, ending at acceptance in the agreed test environment. Include release deployment, real-data migration, write freezes or traffic cutover from the plan only when the user explicitly asks to include them in this task list. Implementing and testing migration tools or release scripts remains development work.
+
+1. Establish the deliverables, test environment and completion criteria for this scope, then map in-scope behaviors, external contracts and checks to requirements. Cut by observable outcome. Split off a shared prerequisite only when it has a deliverable and a check of its own.
 2. Give each phase its stable ID, scope, immediate dependencies, requirement, acceptance and assigned tasks. Distinguish files available to read now, outputs promised by predecessors and files this phase may create. Open the required inputs before handoff. State exactly where the next executor can consume a predecessor's output and find its acceptance evidence.
 3. Name the allowed writes for each implementer. Only the coordinator updates the original task list. Budget for reading, diagnosing, review and testing. Where several systems are unknown, define a bounded investigation with a deliverable or split the phase.
 4. Assign one final phase that depends transitively on all necessary phases. Include a task that exercises their integration through a user entry point. Specify the input, predecessor capabilities it traverses and the observable outcome.

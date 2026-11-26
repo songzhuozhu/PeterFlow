@@ -3,8 +3,9 @@
 ## Shared context
 
 - Workspace and documents: Specify paths and their working directories.
-- Goal, source decisions and scope: Link existing sections.
-- Rules and constraints: Include applicable standards, allowed writes and test conditions.
+- Goal, source decisions and scope: Link existing sections. If release work is included, record the user's explicit request.
+- Completion criteria: List development deliverables, the test environment and acceptance results.
+- Rules and constraints: Include applicable standards and allowed writes.
 - Final Phase: P002
 
 ## Phase P001: First independent result
@@ -28,7 +29,7 @@
 
 ## Phase P002: Integration and cumulative acceptance
 
-- Goal and basis: Downstream behavior and complete user outcome.
+- Goal and basis: Downstream behavior and complete user outcome within this scope.
 - Dependencies: P001
 - Status: incomplete
 - Read now and at handoff: Name the P001 artifact, how to use it and where its evidence lives.

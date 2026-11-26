@@ -2,6 +2,8 @@
 
 Link the plan and requirement. Edit the phases around the outcomes of this change. In a Dependencies field use `none` or comma-separated IDs. Task IDs are unique across phases.
 
+Scope and completion: List development deliverables, the test environment and acceptance results. If release work is included, record the user's explicit request.
+
 ## Phase P001: First observable capability
 
 - Goal: Deliver the first usable behavior.
@@ -21,7 +23,7 @@ Link the plan and requirement. Edit the phases around the outcomes of this chang
 ## Phase P002: Connect the next capability
 
 - Goal: Deliver the downstream behavior.
-- Basis: Remaining requirement and combined outcome.
+- Basis: Remaining requirement and combined outcome within this scope.
 - Dependencies: P001
 - Acceptance: A user sees the combined result.
 

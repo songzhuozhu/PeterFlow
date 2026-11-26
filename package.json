@@ -1,6 +1,6 @@
 {
   "name": "peterflow",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Composable engineering workflows for coding agents. Install one skill or a whole English or Chinese edition.",
   "type": "module",
   "bin": { "peterflow": "bin/peterflow.js" },
